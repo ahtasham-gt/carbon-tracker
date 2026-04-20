@@ -2,7 +2,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -10,21 +10,21 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4   # ✅ updated
 
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # Build Backend
-      - name: Build Backend Image
+      # Backend
+      - name: Build Backend
         run: docker build -t ahte786/carbon-backend ./server
 
-      - name: Push Backend Image
+      - name: Push Backend
         run: docker push ahte786/carbon-backend
 
-      # Build Frontend
-      - name: Build Frontend Image
+      # Frontend
+      - name: Build Frontend
         run: docker build -t ahte786/carbon-frontend ./client
 
-      - name: Push Frontend Image
+      - name: Push Frontend
         run: docker push ahte786/carbon-frontend
