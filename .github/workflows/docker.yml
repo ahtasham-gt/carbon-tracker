@@ -34,9 +34,7 @@ jobs:
       
       - name: Build Frontend Image
         run: |
-          docker build \
-            --build-arg REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} \
-            -t ahte786/carbon-frontend ./client
+          docker build -t ahte786/carbon-frontend ./client
 
       - name: Push Frontend Image
         run: |

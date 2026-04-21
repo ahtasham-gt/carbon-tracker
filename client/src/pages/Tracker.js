@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+const API = "/api";
 const vehicleOptions = {
   car: ["hatchback", "sedan", "suv"],
   bike: ["standard", "sports"],
@@ -32,32 +32,32 @@ function Tracker() {
   const [history, setHistory] = useState([]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const payload = {
-        ...form,
-        distance: Number(form.distance),
-        year: Number(form.year)
-      };
+  try {
+    const payload = {
+      ...form,
+      distance: Number(form.distance),
+      year: Number(form.year)
+    };
 
-      const res = await axios.post(fetch(`${process.env.REACT_APP_API_URL}/calculate`), payload);
+    const res = await axios.post(`${API}/calculate`, payload);
 
-      setResult(res.data.trip);
-      setComparison(res.data.comparison);
-      setSuggestion(res.data.suggestion);
+    setResult(res.data.trip);
+    setComparison(res.data.comparison);
+    setSuggestion(res.data.suggestion);
 
-      fetchHistory();
+    fetchHistory();
 
-    } catch (err) {
-      alert(err.response?.data?.error || "Error occurred");
-    }
-  };
+  } catch (err) {
+    alert(err.response?.data?.error || "Error occurred");
+  }
+};
 
   const fetchHistory = async () => {
-    const res = await axios.get(fetch(`${process.env.REACT_APP_API_URL}/history`));
-    setHistory(res.data);
-  };
+  const res = await axios.get(`${API}/history`);
+  setHistory(res.data);
+};
 
   useEffect(() => {
     fetchHistory();
