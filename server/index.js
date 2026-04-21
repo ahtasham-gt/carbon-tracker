@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 //=============================
-import client from "prom-client";
+const client = require("prom-client");
 
 const collectDefaultMetrics = client.collectDefaultMetrics;
 collectDefaultMetrics();
