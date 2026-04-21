@@ -41,7 +41,7 @@ function Tracker() {
         year: Number(form.year)
       };
 
-      const res = await axios.post(process.env.REACT_APP_API_URL + "/api/calculate", payload);
+      const res = await axios.post(fetch(`${process.env.REACT_APP_API_URL}/calculate`), payload);
 
       setResult(res.data.trip);
       setComparison(res.data.comparison);
@@ -55,7 +55,7 @@ function Tracker() {
   };
 
   const fetchHistory = async () => {
-    const res = await axios.get(process.env.REACT_APP_API_URL + "/api/history");
+    const res = await axios.get(fetch(`${process.env.REACT_APP_API_URL}/history`));
     setHistory(res.data);
   };
 
