@@ -5,30 +5,37 @@ require("dotenv").config();
 //=============================
 const client = require("prom-client");
 
-const collectDefaultMetrics = client.collectDefaultMetrics;
-collectDefaultMetrics();
+const app = express();
 
-const httpRequestCounter = new client.Counter({
+app.use(cors());
+app.use(express.json());
+
+client.collectDefaultMetrics();
+
+const register = new client.Registry();
+
+const httpRequests = new client.Counter({
   name: "http_requests_total",
-  help: "Total HTTP Requests",
+  help: "Total HTTP requests",
   labelNames: ["method", "route", "status"]
 });
 
+register.registerMetric(httpRequests);
+
 app.use((req, res, next) => {
   res.on("finish", () => {
-    httpRequestCounter.inc({
+    httpRequests.inc({
       method: req.method,
-      route: req.route?.path || req.path,
+      route: req.path,
       status: res.statusCode
     });
   });
   next();
 });
 
-
 app.get("/metrics", async (req, res) => {
-  res.set("Content-Type", client.register.contentType);
-  res.end(await client.register.metrics());
+  res.set("Content-Type", register.contentType);
+  res.end(await register.metrics());
 });
 //=============================
 
@@ -40,10 +47,7 @@ const {
   suggestAlternative
 } = require("./utils/emission");
 
-const app = express();
 
-app.use(cors());
-app.use(express.json());
 
 // MongoDB
 mongoose.connect(process.env.MONGO_URI)
